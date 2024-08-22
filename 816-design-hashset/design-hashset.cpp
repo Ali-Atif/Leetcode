@@ -1,20 +1,40 @@
 class MyHashSet {
-public:
-    vector<bool>bucket;
-    MyHashSet() {
-        bucket=vector<bool>(1000001,false);
+private:
+    const int SIZE = 1001;
+    int hash(int index){
+        return index % SIZE;
     }
-    
+
+public:
+    vector<list<int>> hashVec;
+    MyHashSet() {
+        hashVec.resize(SIZE);
+    }
     void add(int key) {
-        bucket[key]=true; 
+        //if the key is already present
+        if(contains(key))
+            return;
+        int index = hash(key);
+        hashVec[index].push_back(key);
     }
     
     void remove(int key) {
-        bucket[key]=false; 
+        if( ! contains(key)){
+            return;
+        }
+        int index = hash(key);
+        hashVec[index].remove(key);
     }
     
     bool contains(int key) {
-        return bucket[key];
+        int index = hash(key);
+        for (int storedKey : hashVec[index]) {
+            //for every stored key at that index
+            if (storedKey == key) {
+                return true;
+            }
+        }
+        return false;
     }
 };
 
